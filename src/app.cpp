@@ -1,8 +1,12 @@
 #include <iostream>
 #include <sstream>
+#include <fstream>
+#include <algorithm>
+#include <string>
 
 #include "app.h"
 #include "appinfo.h"
+
 
 #include "rapidjson/document.h"
 #include "rapidjson/writer.h"
@@ -10,6 +14,7 @@
 
 #include "curl/curl.h"
 
+using namespace std;
 using namespace rapidjson;
 
 App::App(int& argc, char** argv) 
@@ -36,6 +41,12 @@ static int writer(char *data, size_t size, size_t nmemb, std::string *buffer_in)
 		// How much did we write?   
 		DownloadedResponse = buffer_in;
 
+
+		std::ofstream myfile;
+		myfile.open("example.txt");
+		myfile << data;
+		myfile.close();
+
 		return size * nmemb;
 	}
 
@@ -49,9 +60,7 @@ std::string DownloadJSON(std::string URL)
 	CURLcode res;
 	struct curl_slist *headers = NULL; // init to NULL is important 
 	std::ostringstream oss;
-	//curl_slist_append(headers, "Accept: application/json");
-	//curl_slist_append(headers, "Content-Type: application/json");
-	//curl_slist_append(headers, "charsets: utf-8");
+
 	curl = curl_easy_init();
 
 	if (curl)
@@ -80,39 +89,30 @@ std::string DownloadJSON(std::string URL)
 int App::Execute()
 {
 	curl_global_init(CURL_GLOBAL_DEFAULT);
-	std::string js = DownloadJSON("https://api.telegram.org/bot209137847:AAH7uktgrCt1_TGDFdX6-xM80KF9GgNfADE/getMe");
-	std::cout << js;
+	std::string js = DownloadJSON("https://api.telegram.org/bot209137847:AAH7uktgrCt1_TGDFdX6-xM80KF9GgNfADE/getUpdates?offset=-1");
+//	std::cout << js;
 	CURL *curl;
 	CURLcode res;
 
-	curl = curl_easy_init();
-	if (curl) {
-		curl_easy_setopt(curl, CURLOPT_URL, "http://api.telegram.org/bot209137847:AAH7uktgrCt1_TGDFdX6-xM80KF9GgNfADE/getMe");
-		/* example.com is redirected, so we tell libcurl to follow redirection */
-		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
-
-		/* Perform the request, res will get the return code */
-		res = curl_easy_perform(curl);
-		/* Check for errors */
-		if (res != CURLE_OK)
-			fprintf(stderr, "curl_easy_perform() failed: %s\n",
-				curl_easy_strerror(res));
-
-		/* always cleanup */
-		curl_easy_cleanup(curl);
-	}
-
-
-
 	// 1. Parse a JSON string into DOM.
-	const char* json = "{\"project\":\"rapidjson\",\"stars\":10}";
+	const char* json = "{\"ok\":true,\"result\":{\"id\":209137847,\"first_name\":\"NedjaBot\",\"username\":\"NedjaBot\"}}"; //
+//	const char* json = "{\"project\":\"rapidjson\",\"stars\":10}";
 	Document d;
-	d.Parse(json);
+	
+	//remove null terminated
+	js.erase(std::remove(js.begin(), js.end(), '\0'), js.end());
+
+	d.Parse(js.c_str());
 
 	// 2. Modify it by DOM.
-	Value& s = d["stars"];
-	s.SetInt(s.GetInt() + 1);
+	Value& s = d["ok"];
+	cout << s.GetBool();
 
+	Value& res1 = d["result"];
+	Value& first = res1[0];
+	Value& msg = first["message"];
+	Value& text = msg["text"];
+	cout << text.GetString();
 	// 3. Stringify the DOM
 	StringBuffer buffer;
 	Writer<StringBuffer> writer(buffer);
