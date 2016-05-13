@@ -4,13 +4,13 @@
 # Project Properties
 #
 CMAKE_MINIMUM_REQUIRED (VERSION 2.6.2)
-PROJECT (NameCppProjectTemplate)
-SET (APPLICATION_NAME "Project Name")
+PROJECT (TelegramBot)
+SET (APPLICATION_NAME "Telegram Bot")
 SET (APPLICATION_CODENAME "${PROJECT_NAME}")
-SET (APPLICATION_COPYRIGHT_YEARS "2009")
-SET (APPLICATION_VERSION_MAJOR 1)
+SET (APPLICATION_COPYRIGHT_YEARS "2016")
+SET (APPLICATION_VERSION_MAJOR 0)
 SET (APPLICATION_VERSION_MINOR 0)
-SET (APPLICATION_VERSION_PATCH 0)
+SET (APPLICATION_VERSION_PATCH 1)
 SET (APPLICATION_VERSION_TYPE SNAPSHOT)
 SET (APPLICATION_VERSION_STRING "${APPLICATION_VERSION_MAJOR}.${APPLICATION_VERSION_MINOR}.${APPLICATION_VERSION_PATCH}-${APPLICATION_VERSION_TYPE}")
 SET (APPLICATION_VENDOR_ID "com.yourcompany")
@@ -22,7 +22,7 @@ SET (APPLICATION_ID "${APPLICATION_VENDOR_ID}.${PROJECT_NAME}")
 #
 # Debugging Options
 #
-SET (CMAKE_VERBOSE_MAKEFILE 0) # Use 1 for debugging, 0 for release
+SET (CMAKE_VERBOSE_MAKEFILE 1) # Use 1 for debugging, 0 for release
 
 #
 # Project Output Paths
@@ -56,7 +56,8 @@ include(tools/share/cmake/NPMacros.cmake)
 #	THIRD_<Name>_NAME
 #
 #######################################
-REQUIRED_THIRD(FIRST "first library" NameCppLibraryTemplate)
+#find_package(RapidJSON)
+#REQUIRED_THIRD(FIRST "first library" NameCppLibraryTemplate)
 ############################
 #
 # OPTIONAL
@@ -121,7 +122,7 @@ ENDFOREACH (CONFIGINPUT ${CONFIGINPUTS})
 # Add Build Targets
 #
 ADD_SUBDIRECTORY(src)
-add_subdirectory(thirdparty)
+#add_subdirectory(thirdparty)
 #ADD_SUBDIRECTORY(test)
 
 #
