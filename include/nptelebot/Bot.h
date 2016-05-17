@@ -13,7 +13,8 @@ namespace nptelebot
 		Bot(std::string key);
 		User& getMe();
 		vector<Update*> getUpdates(int offset);
-		void setTyping();
+		void setTyping(string chat_id);
+		void sendMessage(int chat_id, string message);
 		~Bot();
 	protected:
 		bool _parseResponse(const char* request);

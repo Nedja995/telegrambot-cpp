@@ -5,7 +5,6 @@
 #include <iostream>
 namespace nptelebot
 {
-
 	using namespace std;
 	using namespace response;
 
@@ -56,28 +55,27 @@ namespace nptelebot
 	{
 		auto ret = vector<Update*>();
 		auto resp = curl->Request(url + "getUpdates");
-		if (_parseResponse(resp))
-		{
+		if (_parseResponse(resp)){
 			Value& results = _lastResponse["result"];
-
 			for (SizeType i = 0; i < results.Size(); i++) {
 				Value& result = results[i];
-				//-Update
 				ret.push_back(new Update(result));
 			}
-			
 		}
-		else
-		{
+		else{
 			// Not ok
 		}
-
 		return ret;
 	}
 
-	void Bot::setTyping()
+	void Bot::setTyping(string chat_id)
 	{
-		auto resp = curl->Request(url + "sendChatAction?action=typing&chat_id=180771137");	
+		auto resp = curl->Request(url + "sendChatAction?action=typing&chat_id=" + chat_id);
+	}
+
+	void Bot::sendMessage(int chat_id, string message)
+	{
+		auto resp = curl->Request(url + "sendMessage?chat_id=" +  to_string(chat_id) + "&text=" + message);
 	}
 
 	Bot::~Bot()
@@ -87,9 +85,7 @@ namespace nptelebot
 	bool Bot::_parseResponse(const char* request)
 	{
 		//Document d;
-
-		if (!_lastResponse.Parse(request).HasParseError())
-		{
+		if (!_lastResponse.Parse(request).HasParseError()){
 			Value& s = _lastResponse["ok"];
 			if (!s.GetBool()) {
 				std::cerr << "getResult: Response not Ok: " << request << std::endl;
@@ -106,8 +102,6 @@ namespace nptelebot
 		//	Value& idd = *res;
 		//	Document::AllocatorType& a = d.GetAllocator();
 		//	Value re(result, a);
-
-
 	/*	StringBuffer buffer;
 		Writer<StringBuffer> writer(buffer);
 		result.Accept(writer);
@@ -115,8 +109,6 @@ namespace nptelebot
 
 		//	Value& id = re["id"];
 		//	auto ret = id.GetInt();
-
 		return true;
-
 	}
 }
