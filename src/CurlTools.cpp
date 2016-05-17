@@ -34,7 +34,7 @@ namespace nptelebot
 //		return 0;
 	}
 
-	char* CurlTools::Request(const char* URL)
+	char* CurlTools::Request(std::string url)
 	{
 		CURL *curl;
 		CURLcode res;
@@ -42,7 +42,7 @@ namespace nptelebot
 
 		if (curl)
 		{
-			curl_easy_setopt(curl, CURLOPT_URL, URL);
+			curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
 			curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
 			curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
 			curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writer);
