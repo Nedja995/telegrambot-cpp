@@ -21,7 +21,7 @@ namespace nptelebot
 		if (_parseResponse(resp))
 		{
 			User& ret = *new User;
-			Value& result = _lastResponse["result"];
+			Value& result = _response["result"];
 			ret.id = result["id"].GetInt();
 			ret.first_name = result["first_name"].GetString();
 			ret.username = result["username"].GetString();
@@ -51,12 +51,19 @@ namespace nptelebot
 		return *new User;
 	}
 
-	vector<Update*> Bot::getUpdates(int offset)
+	vector<Update*> Bot::getUpdates(int limit)
 	{
 		auto ret = vector<Update*>();
-		auto resp = curl->Request(url + "getUpdates");
+		//base request
+		auto req = url + "getUpdates"; 
+		//add offset if exists
+		if (limit > 0) req += "?offset=-" + to_string(limit); 
+		// Request
+		auto resp = curl->Request(req);
+		// Parse response
 		if (_parseResponse(resp)){
-			Value& results = _lastResponse["result"];
+			// Parse Updates from parsed response
+			Value& results = _response["result"];
 			for (SizeType i = 0; i < results.Size(); i++) {
 				Value& result = results[i];
 				ret.push_back(new Update(result));
@@ -68,9 +75,9 @@ namespace nptelebot
 		return ret;
 	}
 
-	void Bot::setTyping(string chat_id)
+	void Bot::setTyping(int chat_id)
 	{
-		auto resp = curl->Request(url + "sendChatAction?action=typing&chat_id=" + chat_id);
+		auto resp = curl->Request(url + "sendChatAction?action=typing&chat_id=" + to_string(chat_id));
 	}
 
 	void Bot::sendMessage(int chat_id, string message)
@@ -82,21 +89,22 @@ namespace nptelebot
 	{
 	}
 
-	bool Bot::_parseResponse(const char* request)
+	bool Bot::_parseResponse(const char* responseJson)
 	{
-		//Document d;
-		if (!_lastResponse.Parse(request).HasParseError()){
-			Value& s = _lastResponse["ok"];
+		if (!_response.Parse(responseJson).HasParseError()){
+			Value& s = _response["ok"];
 			if (!s.GetBool()) {
-				std::cerr << "getResult: Response not Ok: " << request << std::endl;
+				//Not Ok result error
+				std::cerr << "getResult: Response not Ok: " << responseJson << std::endl;
 				return false;
 			}
 		}
 		else {
-			std::cerr << "getResult: Cannot parse response: " << request << std::endl;
+			//Cannot read error
+			std::cerr << "getResult: Cannot parse response: " << responseJson << std::endl;
 			return false;
 		}
-		//Value& result = _lastResponse["result"];
+		//Value& result = _response["result"];
 
 		//	Value* resP = GetValueByPointer(d, "result");
 		//	Value& idd = *res;

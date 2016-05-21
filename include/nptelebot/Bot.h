@@ -12,13 +12,14 @@ namespace nptelebot
 		std::string key;
 		Bot(std::string key);
 		User& getMe();
-		vector<Update*> getUpdates(int offset);
-		void setTyping(string chat_id);
+		vector<Update*> getUpdates(int limit);
+		void setTyping(int chat_id);
 		void sendMessage(int chat_id, string message);
 		~Bot();
 	protected:
-		bool _parseResponse(const char* request);
-		rapidjson::Document _lastResponse;
+		// Recive response and store in _response;
+		bool _parseResponse(const char* responseJson);
+		rapidjson::Document _response;
 		std::string url;
 		CurlTools* curl;
 	};

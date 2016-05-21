@@ -1,17 +1,18 @@
 #include <iostream>
 #include <algorithm>
 #include <string>
-
+#include <stdlib.h>     // for _sleep() 
 #include "app.h"
 #include "appinfo.h"
 
 
-#include "nptelebot/Bot.h"
-#include "nptelebot/ResponseData.h"
+//#include "nptelebot/Bot.h"
+//#include "nptelebot/ResponseData.h"
+
+#include "nptelebot/Bots/BotSentimentAndAbuse.h"
 
 using namespace std;
 using namespace nptelebot;
-using namespace response;
 
 static string key = "209137847:AAH7uktgrCt1_TGDFdX6-xM80KF9GgNfADE";
 
@@ -26,12 +27,24 @@ App::~App()
 
 int App::Execute()
 {
-	Bot& bot = *new Bot(key.c_str());
-	User& user = bot.getMe();
-	cout << user.first_name << " " << user.username << " " << user.id << endl;
+	cout << "Start bot that responds to Positive or Negative sentinces and Profanity words.";
+	bots::BotSentimentAndAbuse& translater = bots::BotSentimentAndAbuse::Create(key);
+	translater.initialize();
+	translater.run();
+	//Bot& bot = *new Bot(key.c_str());
+	//User& user = bot.getMe();
+	//cout << user.first_name << " " << user.username << " " << user.id << endl;
 
-	auto updates = bot.getUpdates(2);
-
+	//auto updates = bot.getUpdates(1);
+	//if (updates.size() > 0) {
+	//	auto update = updates[0];
+	//	auto chat = update->message->chat;
+	//	if (chat != NULL) {
+	//		bot.setTyping(chat->id);
+	//		_sleep(3000);
+	//		bot.sendMessage(chat->id, "Odgovor od bota");
+	//	}
+	//}
 	/*if (user == NULL) {
 		cerr << "getMe: Failed" << endl;
 		return 1;
