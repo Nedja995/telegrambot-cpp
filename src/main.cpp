@@ -11,7 +11,15 @@ int main(int argc, char* argv[])
 {
 	initThirdParty();
 
-    App app(argc,argv);
+	//debug params
+	argc = 3;
+	char* argvDebug[] = {
+		"",
+		"209137847:AAH7uktgrCt1_TGDFdX6-xM80KF9GgNfADE",
+		"SentimentAndAbuse"
+	};
+
+    nptelebot::App app(argc, argvDebug);
     return app.Execute();
 }
 

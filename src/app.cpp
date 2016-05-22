@@ -5,10 +5,6 @@
 #include "app.h"
 #include "appinfo.h"
 
-
-//#include "nptelebot/Bot.h"
-//#include "nptelebot/ResponseData.h"
-
 #include "nptelebot/Bots/BotSentimentAndAbuse.h"
 
 using namespace std;
@@ -16,21 +12,50 @@ using namespace nptelebot;
 
 static string key = "209137847:AAH7uktgrCt1_TGDFdX6-xM80KF9GgNfADE";
 
-App::App(int& argc, char** argv) 
+App::App(int argc, char* argv[])
+	: _bot(nullptr)
 {
-	
+	if (argc == 3) {
+		key = argv[1];
+		if (!createBot(argv[2])) {
+			cout << "! Error starting bot with name: " << argv[2] << endl;
+			system("PAUSE");
+			exit(EXIT_FAILURE);
+		}
+	}
+	else {
+		cout << "! Error starting bot. Need arguments: <MonkeyLearn.com Api Key> <bot>" << endl;
+		cout << "Available bots:" << endl;
+		cout << "	SentimentAndAbuse" << endl;
+		cout << "	" << endl;
+		system("PAUSE");
+		exit(EXIT_FAILURE);
+	}
+}
+
+bool App::createBot(string botName)
+{
+	if (botName == "SentimentAndAbuse") {
+		_bot = (IBot*)new bots::BotSentimentAndAbuse();
+		cout << "Create bot that responds to Positive or Negative sentinces and Profanity words.";
+		return true;
+	}
+	else if (botName == "SaveMessages") {
+		cout << "Create bot that save all messages.";
+		return true;
+	}
+	return false;
 }
 
 App::~App()
 {
+	delete _bot;
 }
 
 int App::Execute()
 {
-	cout << "Start bot that responds to Positive or Negative sentinces and Profanity words.";
-	bots::BotSentimentAndAbuse& translater = bots::BotSentimentAndAbuse::Create(key);
-	translater.initialize();
-	translater.run();
+	_bot->initialize(key);
+	_bot->run();
 	//Bot& bot = *new Bot(key.c_str());
 	//User& user = bot.getMe();
 	//cout << user.first_name << " " << user.username << " " << user.id << endl;
@@ -68,3 +93,4 @@ int App::Execute()
 	//std::cout << "ds";
 	return 0;
 }
+

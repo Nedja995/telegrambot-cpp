@@ -6,6 +6,7 @@
 namespace npml {
 	using namespace rapidjson;
 
+	//https://app.monkeylearn.com/categorizer/projects/cl_KFXhoTdt/tab/classify-sandbox
 	bool DetectProfanity::hasProfanity(string text)
 	{
 		bool ret = true;
