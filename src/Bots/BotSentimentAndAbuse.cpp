@@ -15,17 +15,12 @@ namespace bots {
 		auto ret = new BotSentimentAndAbuse();
 		return *ret;
 	}
-	bool BotSentimentAndAbuse::initialize(std::string key)
-	{
-		_bot = new Bot(key);
-		User& user = _bot->getMe();
-		return true;
-	}
+
 
 //	CComPtr<IProgram> yourClass;
 	bool BotSentimentAndAbuse::run()
 	{
-		cout << "Start bot SentimentAndAbuse" << endl;
+		cout << endl << "Start bot SentimentAndAbuse" << endl;
 		auto profanityDetector = npml::DetectProfanity();
 		auto sentimentDector = npml::DetectSentiment();
 

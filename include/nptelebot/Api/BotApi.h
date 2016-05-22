@@ -6,16 +6,16 @@
 namespace nptelebot
 {
 	using namespace rapidjson;
-	class Bot
+	class BotApi
 	{
 	public:
 		std::string key;
-		Bot(std::string key);
+		BotApi(std::string key);
 		User& getMe();
 		vector<Update*> getUpdates(int limit);
 		void setTyping(int chat_id);
 		void sendMessage(int chat_id, string message);
-		~Bot();
+		~BotApi();
 	protected:
 		// Recive response and store in _response;
 		bool _parseResponse(const char* responseJson);

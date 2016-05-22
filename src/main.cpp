@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
 	char* argvDebug[] = {
 		"",
 		"209137847:AAH7uktgrCt1_TGDFdX6-xM80KF9GgNfADE",
-		"SentimentAndAbuse"
+		"TimedMessageSaver"
 	};
 
     nptelebot::App app(argc, argvDebug);

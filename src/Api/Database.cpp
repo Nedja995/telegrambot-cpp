@@ -23,7 +23,7 @@ namespace api {
 	{
 		string ret;
 		string line;
-		ifstream myfile("example.txt");
+		ifstream myfile(filePath);
 		
 		if (myfile.is_open())
 		{

@@ -1,20 +1,17 @@
-#include "nptelebot/Bot.h"
-#include "nptelebot/ResponseData.h"
+#include "nptelebot/Api/BotApi.h"
 
 #include <algorithm>
 #include <iostream>
 namespace nptelebot
 {
-	using namespace std;
-	using namespace response;
 
-	Bot::Bot(std::string key)
+	BotApi::BotApi(std::string key)
 	{
 		curl = &CurlTools::Create();
 		url = "https://api.telegram.org/bot" + key + "/";
 	}
 
-	User& Bot::getMe()
+	User& BotApi::getMe()
 	{
 		//auto ret = true;
 		auto resp = curl->Request(url + "getMe");
@@ -51,7 +48,7 @@ namespace nptelebot
 		return *new User;
 	}
 
-	vector<Update*> Bot::getUpdates(int limit)
+	vector<Update*> BotApi::getUpdates(int limit)
 	{
 		auto ret = vector<Update*>();
 		//base request
@@ -75,21 +72,21 @@ namespace nptelebot
 		return ret;
 	}
 
-	void Bot::setTyping(int chat_id)
+	void BotApi::setTyping(int chat_id)
 	{
 		auto resp = curl->Request(url + "sendChatAction?action=typing&chat_id=" + to_string(chat_id));
 	}
 
-	void Bot::sendMessage(int chat_id, string message)
+	void BotApi::sendMessage(int chat_id, string message)
 	{
 		auto resp = curl->Request(url + "sendMessage?chat_id=" +  to_string(chat_id) + "&text=" + message);
 	}
 
-	Bot::~Bot()
+	BotApi::~BotApi()
 	{
 	}
 
-	bool Bot::_parseResponse(const char* responseJson)
+	bool BotApi::_parseResponse(const char* responseJson)
 	{
 		if (!_response.Parse(responseJson).HasParseError()){
 			Value& s = _response["ok"];

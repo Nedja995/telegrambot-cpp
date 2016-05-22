@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "nptelebot/Bot.h"
+#include "nptelebot/Api/BotApi.h"
 #include "nptelebot/IBot.h"
 
 namespace nptelebot {
@@ -9,15 +9,14 @@ namespace bots {
 
 	class BotSentimentAndAbuse : IBot {
 	public:
-	//	BotSentimentAndAbuse(string key);
-		 ~BotSentimentAndAbuse() override;
 		static BotSentimentAndAbuse& Create();
 		// Inherited via IBot
-		virtual bool initialize(std::string key) override;
+		 ~BotSentimentAndAbuse() override;
+//		virtual bool initialize(std::string key) override;
 		virtual bool run() override;
 
 	protected:
-		Bot* _bot;
+		BotApi* _bot;
 		// Last responded message Id
 		int _lastMessageId;
 

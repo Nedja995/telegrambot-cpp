@@ -6,6 +6,7 @@
 #include "appinfo.h"
 
 #include "nptelebot/Bots/BotSentimentAndAbuse.h"
+#include "nptelebot/Bots/BotTimedMessageSaver.h"
 
 using namespace std;
 using namespace nptelebot;
@@ -27,6 +28,7 @@ App::App(int argc, char* argv[])
 		cout << "! Error starting bot. Need arguments: <MonkeyLearn.com Api Key> <bot>" << endl;
 		cout << "Available bots:" << endl;
 		cout << "	SentimentAndAbuse" << endl;
+		cout << "	TimedMessageSaver" << endl;
 		cout << "	" << endl;
 		system("PAUSE");
 		exit(EXIT_FAILURE);
@@ -40,8 +42,9 @@ bool App::createBot(string botName)
 		cout << "Create bot that responds to Positive or Negative sentinces and Profanity words.";
 		return true;
 	}
-	else if (botName == "SaveMessages") {
-		cout << "Create bot that save all messages.";
+	else if (botName == "TimedMessageSaver") {
+		cout << "Create bot that save all messages at given interval.";
+		_bot = (IBot*)new bots::BotTimedMessagesSaver();
 		return true;
 	}
 	return false;
